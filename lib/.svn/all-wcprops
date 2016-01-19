@@ -1,0 +1,257 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/elmoRepo/!svn/ver/129/trunk/ProjectElmo/lib
+END
+spring-orm-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-orm-4.1.6.RELEASE.jar
+END
+spring-instrument-tomcat-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-instrument-tomcat-4.1.6.RELEASE.jar
+END
+spring-security-crypto-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-crypto-3.2.5.RELEASE.jar
+END
+commons-io-1.3.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/elmoRepo/!svn/ver/129/trunk/ProjectElmo/lib/commons-io-1.3.2.jar
+END
+spring-security-config-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-config-3.2.5.RELEASE.jar
+END
+spring-context-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-context-4.1.6.RELEASE.jar
+END
+spring-security-remoting-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-remoting-3.2.5.RELEASE.jar
+END
+spring-context-support-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-context-support-4.1.6.RELEASE.jar
+END
+spring-webmvc-portlet-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-webmvc-portlet-4.1.6.RELEASE.jar
+END
+aopalliance-1.0.jar
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/aopalliance-1.0.jar
+END
+javax.servlet-api-3.0.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/89/trunk/ProjectElmo/lib/javax.servlet-api-3.0.1.jar
+END
+spring-jdbc-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-jdbc-4.1.6.RELEASE.jar
+END
+commons-logging-1.1.3.jar
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/commons-logging-1.1.3.jar
+END
+spring-security-acl-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-acl-3.2.5.RELEASE.jar
+END
+jstl-1.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/elmoRepo/!svn/ver/54/trunk/ProjectElmo/lib/jstl-1.2.jar
+END
+org.osgi.core-4.3.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/elmoRepo/!svn/ver/7/trunk/ProjectElmo/lib/org.osgi.core-4.3.1.jar
+END
+spring-aop-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-aop-4.1.6.RELEASE.jar
+END
+spring-beans-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-beans-4.1.6.RELEASE.jar
+END
+commons-fileupload-1.2.2.jar
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/129/trunk/ProjectElmo/lib/commons-fileupload-1.2.2.jar
+END
+spring-tx-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-tx-4.1.6.RELEASE.jar
+END
+spring-messaging-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-messaging-4.1.6.RELEASE.jar
+END
+spring-security-web-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-web-3.2.5.RELEASE.jar
+END
+spring-webmvc-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-webmvc-4.1.6.RELEASE.jar
+END
+log4j-api-2.4.jar
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/elmoRepo/!svn/ver/7/trunk/ProjectElmo/lib/log4j-api-2.4.jar
+END
+spring-security-cas-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-cas-3.2.5.RELEASE.jar
+END
+spring-websocket-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-websocket-4.1.6.RELEASE.jar
+END
+spring-security-core-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-core-3.2.5.RELEASE.jar
+END
+spring-security-aspects-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-aspects-3.2.5.RELEASE.jar
+END
+gson-2.3.1.jar
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/elmoRepo/!svn/ver/7/trunk/ProjectElmo/lib/gson-2.3.1.jar
+END
+spring-jms-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-jms-4.1.6.RELEASE.jar
+END
+spring-security-openid-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-openid-3.2.5.RELEASE.jar
+END
+spring-test-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-test-4.1.6.RELEASE.jar
+END
+log4j-core-2.4.jar
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/elmoRepo/!svn/ver/7/trunk/ProjectElmo/lib/log4j-core-2.4.jar
+END
+spring-security-ldap-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-ldap-3.2.5.RELEASE.jar
+END
+spring-web-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-web-4.1.6.RELEASE.jar
+END
+spring-expression-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-expression-4.1.6.RELEASE.jar
+END
+spring-security-taglibs-3.2.5.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-security-taglibs-3.2.5.RELEASE.jar
+END
+spring-aspects-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-aspects-4.1.6.RELEASE.jar
+END
+spring-core-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-core-4.1.6.RELEASE.jar
+END
+ojdbc6.jar
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/elmoRepo/!svn/ver/9/trunk/ProjectElmo/lib/ojdbc6.jar
+END
+spring-oxm-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-oxm-4.1.6.RELEASE.jar
+END
+spring-instrument-4.1.6.RELEASE.jar
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/lib/spring-instrument-4.1.6.RELEASE.jar
+END

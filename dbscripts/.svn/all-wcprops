@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/elmoRepo/!svn/ver/100/trunk/ProjectElmo/dbscripts
+END
+elmo_script.sql
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/elmoRepo/!svn/ver/100/trunk/ProjectElmo/dbscripts/elmo_script.sql
+END
+elmo_data_script.sql
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/elmoRepo/!svn/ver/26/trunk/ProjectElmo/dbscripts/elmo_data_script.sql
+END

@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/elmoRepo/!svn/ver/151/trunk/ProjectElmo/src/com/elmo/spring/controller
+END
+ManagePeopleController.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/elmoRepo/!svn/ver/145/trunk/ProjectElmo/src/com/elmo/spring/controller/ManagePeopleController.java
+END
+ManageCoursesController.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageCoursesController.java
+END
+ManageEnrollmentsController.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageEnrollmentsController.java
+END
+CoursePageController.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/elmoRepo/!svn/ver/151/trunk/ProjectElmo/src/com/elmo/spring/controller/CoursePageController.java
+END
+LoginController.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/elmoRepo/!svn/ver/145/trunk/ProjectElmo/src/com/elmo/spring/controller/LoginController.java
+END
+ManageOfferingsController.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/elmoRepo/!svn/ver/144/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageOfferingsController.java
+END
+ManageQuestionsController.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageQuestionsController.java
+END
+ManageQuizesController.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageQuizesController.java
+END
+AnnouncementController.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/elmoRepo/!svn/ver/145/trunk/ProjectElmo/src/com/elmo/spring/controller/AnnouncementController.java
+END
+SubmitAssignmentController.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/elmoRepo/!svn/ver/148/trunk/ProjectElmo/src/com/elmo/spring/controller/SubmitAssignmentController.java
+END
+ManageUsersController.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageUsersController.java
+END
+ManageSubmissionsController.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/elmoRepo/!svn/ver/151/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageSubmissionsController.java
+END
+ViewGradesController.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/elmoRepo/!svn/ver/145/trunk/ProjectElmo/src/com/elmo/spring/controller/ViewGradesController.java
+END
+ManageAssignmentsController.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/ManageAssignmentsController.java
+END
+CalendarController.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/controller/CalendarController.java
+END
+ProfilePageController.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/elmoRepo/!svn/ver/145/trunk/ProjectElmo/src/com/elmo/spring/controller/ProfilePageController.java
+END

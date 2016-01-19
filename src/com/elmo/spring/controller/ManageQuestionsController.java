@@ -1,0 +1,287 @@
+package com.elmo.spring.controller;
+
+import com.elmo.spring.constants.ViewNames;
+import com.elmo.spring.persistence.daos.QuestionDao;
+import com.elmo.spring.persistence.daos.QuizDao;
+import com.elmo.spring.persistence.daos.SubmissionDao;
+import com.elmo.spring.persistence.dos.Question;
+import com.elmo.spring.persistence.dos.Quiz;
+import com.elmo.spring.persistence.dos.Submission;
+import com.elmo.spring.persistence.helpers.NotFoundException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import framework.Toolbox;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * Created by VB on 10/8/2015.
+ */
+@Controller
+@SessionAttributes({"GLOBAL_CURRENT_ASSIGNMENT_ID", "GLOBAL_CURRENT_QUIZ_ID"})
+public class ManageQuestionsController {
+
+    @RequestMapping(value = "/elmo/manageQuestions", method = RequestMethod.GET)
+    public ModelAndView init(@RequestParam Map<String, String> params) {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.MANAGE_QUESTIONS);
+        final Long assId = Long.valueOf(params.get("quiz_id"));
+        modelAndView.getModel().put("GLOBAL_CURRENT_QUIZ_ID", assId);
+        Quiz q = null;
+        try {
+            q = new Quiz(assId);
+            QuizDao.load(q);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        modelAndView.getModel().put("QUIZ_NAME", q.getQuiz_title());
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/elmo/manageQuestionsList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listQuestions(@RequestParam Map<String, String> params) {
+        //TODO: Sort order in SQL.
+        ModelAndView modelAndView = new ModelAndView(ViewNames.MANAGE_QUESTIONS);
+
+        List<Question> questionList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            Long quiz_id = (Long) Toolbox.getSession().getAttribute("GLOBAL_CURRENT_QUIZ_ID");
+
+            questionList = QuestionDao.loadAllForQuizId(quiz_id);
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", questionList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/elmo/manageQuestionsUpdate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String updateQuestion(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+
+            Long questionId = new Long(params.get("question_id"));
+
+            Question updatedQuestion = new Question(questionId);
+            QuestionDao.load(updatedQuestion);
+
+
+            final String correct_answers = params.get("correct_answers");
+            final String question_description = params.get("quest_description");
+
+
+            final String a = params.get("optionA");
+
+            final String b = params.get("optionB");
+
+            final String c = params.get("optionC");
+
+            final String d = params.get("optionD");
+
+
+            if (correct_answers.trim().length()==0 || params.get("max_score").trim().length() == 0 || question_description.trim().length() ==0)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("All fields are mandatory!");
+            }
+
+            if (!correct_answers.equals("true")&&!correct_answers.equals("false")) {
+                if(a.trim().length() == 0 || b.trim().length() == 0 || c.trim().length() == 0 || d.trim().length() == 0)
+                {
+                    return Toolbox.Print_Jtable_Validation_Error("For MCQ, option fields are mandatory!");
+                }
+            }
+            if (correct_answers.equals("true")||correct_answers.equals("false")||correct_answers.matches("[abcd]+"))
+            {
+
+            }
+            else
+            {
+                return Toolbox.Print_Jtable_Validation_Error("Correct Answers field should contain only true,false,a,b,c,d !");
+            }
+
+            final Long max_score;
+            try {
+                max_score = Long.valueOf(params.get("max_score"));
+            }
+            catch (NumberFormatException nfe)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("Invalid Max Score!");
+            }
+
+//TODO: add max_score and number in validation
+            if (question_description == null || question_description.trim().length() == 0 || correct_answers == null || correct_answers.trim().length() == 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Fields can't be left empty!");
+            }
+
+            updatedQuestion.setAll(questionId,
+                    question_description, correct_answers, max_score);
+
+            updatedQuestion.setOptionA(a);
+            updatedQuestion.setOptionB(b);
+            updatedQuestion.setOptionC(c);
+            updatedQuestion.setOptionD(d);
+
+            QuestionDao.save(updatedQuestion);
+
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Record", updatedQuestion);
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+
+        }
+        jsonArray = gson.toJson(JSONROOT);
+
+        return jsonArray;
+
+
+    }
+
+
+    @RequestMapping(value = "/elmo/manageQuestionsDelete", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String deleteQuestion(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+            final Long question_id = Long.valueOf(params.get("question_id"));
+
+            List<Submission> subList = SubmissionDao.loadAllForQuizId(Toolbox.getCurrentQuizId());
+            if (subList != null && subList.size() > 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Can't delete question due to existing submissions!");
+            }
+
+            QuestionDao.delete(new Question(question_id));
+
+            List<Question> questionList = QuestionDao.loadAllForQuizId(Toolbox.getCurrentQuizId());
+
+            int i = 1;
+            for (Question q : questionList) {
+                q.setQuestion_number(i++);
+                QuestionDao.save(q);
+            }
+
+            JSONROOT.put("Result", "OK");
+            jsonArray = gson.toJson(JSONROOT);
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/elmo/manageQuestionsCreate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String createQuestion(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+            final Long question_number = QuestionDao.countAllForQuizId(Toolbox.getCurrentQuizId()) + 1;
+            final String correct_answers = params.get("correct_answers");
+            final Long quiz_id = Toolbox.getCurrentQuizId();
+            final String question_description = params.get("quest_description");
+
+            final String a = params.get("optionA");
+
+            final String b = params.get("optionB");
+
+            final String c = params.get("optionC");
+
+            final String d = params.get("optionD");
+
+            if (correct_answers.trim().length()==0 || params.get("max_score").trim().length() == 0 || question_description.trim().length() ==0)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("All fields are mandatory!");
+            }
+
+            if (!correct_answers.equals("true")&&!correct_answers.equals("false")) {
+                if(a.trim().length() == 0 || b.trim().length() == 0 || c.trim().length() == 0 || d.trim().length() == 0)
+                {
+                    return Toolbox.Print_Jtable_Validation_Error("For MCQ, option fields are mandatory!");
+                }
+            }
+            String tmpCorrectAnswer = correct_answers.replace(",","");
+            if (correct_answers.equals("true")||correct_answers.equals("false")||tmpCorrectAnswer.matches("[abcd]+"))
+            {
+
+            }
+            else
+            {
+                return Toolbox.Print_Jtable_Validation_Error("Correct Answers field should contain only true,false,a,b,c,d !");
+            }
+
+            final Long max_score;
+            try {
+                max_score = Long.valueOf(params.get("max_score"));
+            }
+            catch (NumberFormatException nfe)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("Invalid Max Score!");
+            }
+
+            Question newQuestion = new Question(quiz_id, question_number, question_description, correct_answers, max_score, a, b, c, d);
+            QuestionDao.create(newQuestion);
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Record", newQuestion);
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+
+        }
+        jsonArray = gson.toJson(JSONROOT);
+
+        return jsonArray;
+    }
+
+
+}

@@ -1,0 +1,80 @@
+10
+
+dir
+151
+https://xp-dev.com/svn/elmoRepo/trunk/ProjectElmo
+https://xp-dev.com/svn/elmoRepo
+
+
+
+2015-12-05T21:11:31.831297Z
+151
+enpm613
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+df2b84a2-a829-4f6a-adb9-14f5853359e6
+
+.idea
+dir
+
+.settings
+dir
+
+ProjectElmo.iml
+file
+
+
+
+
+2015-11-12T22:29:23.124000Z
+a7a0028fc6e70bf81aebe3fadcf96685
+2015-11-04T21:02:12.150945Z
+7
+enpm613
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1198
+
+dbscripts
+dir
+
+lib
+dir
+
+src
+dir
+
+web
+dir
+

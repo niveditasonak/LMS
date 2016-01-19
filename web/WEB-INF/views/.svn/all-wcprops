@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/elmoRepo/!svn/ver/148/trunk/ProjectElmo/web/WEB-INF/views
+END
+manageOfferings.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/elmoRepo/!svn/ver/118/trunk/ProjectElmo/web/WEB-INF/views/manageOfferings.jsp
+END
+manageQuestions.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/elmoRepo/!svn/ver/115/trunk/ProjectElmo/web/WEB-INF/views/manageQuestions.jsp
+END
+manageQuizes.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/elmoRepo/!svn/ver/135/trunk/ProjectElmo/web/WEB-INF/views/manageQuizes.jsp
+END
+takeQuizes.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/138/trunk/ProjectElmo/web/WEB-INF/views/takeQuizes.jsp
+END
+submitQuiz.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/137/trunk/ProjectElmo/web/WEB-INF/views/submitQuiz.jsp
+END
+people.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/elmoRepo/!svn/ver/136/trunk/ProjectElmo/web/WEB-INF/views/people.jsp
+END
+manageCourses.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/elmoRepo/!svn/ver/116/trunk/ProjectElmo/web/WEB-INF/views/manageCourses.jsp
+END
+profilePage.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/93/trunk/ProjectElmo/web/WEB-INF/views/profilePage.jsp
+END
+logoutsuccess.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/elmoRepo/!svn/ver/105/trunk/ProjectElmo/web/WEB-INF/views/logoutsuccess.jsp
+END
+grades.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/elmoRepo/!svn/ver/126/trunk/ProjectElmo/web/WEB-INF/views/grades.jsp
+END
+calendar.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/web/WEB-INF/views/calendar.jsp
+END
+takeAssignments.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/elmoRepo/!svn/ver/138/trunk/ProjectElmo/web/WEB-INF/views/takeAssignments.jsp
+END
+JSPTemplate.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/elmoRepo/!svn/ver/2/trunk/ProjectElmo/web/WEB-INF/views/JSPTemplate.jsp
+END
+manageAssignments.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/elmoRepo/!svn/ver/134/trunk/ProjectElmo/web/WEB-INF/views/manageAssignments.jsp
+END
+welcome.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/elmoRepo/!svn/ver/105/trunk/ProjectElmo/web/WEB-INF/views/welcome.jsp
+END
+gradesForAdmin.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/elmoRepo/!svn/ver/126/trunk/ProjectElmo/web/WEB-INF/views/gradesForAdmin.jsp
+END
+manageUsers.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/93/trunk/ProjectElmo/web/WEB-INF/views/manageUsers.jsp
+END
+submitAssignment.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/elmoRepo/!svn/ver/148/trunk/ProjectElmo/web/WEB-INF/views/submitAssignment.jsp
+END
+loginFailed.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/elmoRepo/!svn/ver/31/trunk/ProjectElmo/web/WEB-INF/views/loginFailed.jsp
+END
+inbox.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/elmoRepo/!svn/ver/93/trunk/ProjectElmo/web/WEB-INF/views/inbox.jsp
+END

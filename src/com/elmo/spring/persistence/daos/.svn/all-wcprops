@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos
+END
+EnrollmentDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/elmoRepo/!svn/ver/109/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/EnrollmentDao.java
+END
+QuizDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/QuizDao.java
+END
+QuestionDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/elmoRepo/!svn/ver/109/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/QuestionDao.java
+END
+AnnouncementDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/elmoRepo/!svn/ver/95/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/AnnouncementDao.java
+END
+SemesterDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/elmoRepo/!svn/ver/95/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/SemesterDao.java
+END
+UserDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/elmoRepo/!svn/ver/109/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/UserDao.java
+END
+CourseDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/elmoRepo/!svn/ver/95/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/CourseDao.java
+END
+Course_SemesterDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/elmoRepo/!svn/ver/95/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/Course_SemesterDao.java
+END
+SubmissionDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/elmoRepo/!svn/ver/133/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/SubmissionDao.java
+END
+FileDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/elmoRepo/!svn/ver/95/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/FileDao.java
+END
+AssignmentDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/elmoRepo/!svn/ver/150/trunk/ProjectElmo/src/com/elmo/spring/persistence/daos/AssignmentDao.java
+END

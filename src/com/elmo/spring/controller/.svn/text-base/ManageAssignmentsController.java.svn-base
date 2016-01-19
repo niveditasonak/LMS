@@ -1,0 +1,323 @@
+package com.elmo.spring.controller;
+
+import com.elmo.spring.constants.ViewNames;
+import com.elmo.spring.persistence.daos.AssignmentDao;
+import com.elmo.spring.persistence.daos.SubmissionDao;
+import com.elmo.spring.persistence.dos.Assignment;
+import com.elmo.spring.persistence.dos.Submission;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import framework.Toolbox;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * Created by VB on 10/8/2015.
+ */
+@Controller
+public class ManageAssignmentsController {
+
+
+    @RequestMapping(value = "/assignments", method = RequestMethod.GET)
+    public ModelAndView init() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (Toolbox.isInstructor()) {
+            modelAndView.setViewName(ViewNames.MANAGE_ASSIGNMENTS);
+
+        } else {
+            modelAndView.setViewName(ViewNames.TAKE_ASSIGNMENT);
+        }
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/manageAssignments", method = RequestMethod.GET)
+    public ModelAndView initManage() {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.MANAGE_ASSIGNMENTS);
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/manageAssignmentsList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listAssignments() {
+        //TODO: Sort order in SQL.
+        ModelAndView modelAndView = new ModelAndView(ViewNames.MANAGE_ASSIGNMENTS);
+
+        List<Assignment> assignmentList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            assignmentList = AssignmentDao.loadAllForCSId(Toolbox.getCSIDforActiveEnrollment());
+
+            for (Assignment ass : assignmentList) {
+                ass.setAssign_date_created_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_created()));
+                //ass.setAssign_date_expired_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_expired()));
+                ass.setAssign_date_published_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_published()));
+                ass.setAssign_date_due_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_due()));
+            }
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", assignmentList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/takeAssignmentsList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listTakeAssignments() {
+        //TODO: Sort order in SQL.
+        ModelAndView modelAndView = new ModelAndView(ViewNames.MANAGE_ASSIGNMENTS);
+
+        List<Assignment> assignmentList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            assignmentList = AssignmentDao.loadAllForCSIdExceptUnpublished(Toolbox.getCSIDforActiveEnrollment());
+
+            for (Assignment ass : assignmentList) {
+                ass.setAssign_date_created_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_created()));
+                //ass.setAssign_date_expired_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_expired()));
+                ass.setAssign_date_published_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_published()));
+                ass.setAssign_date_due_str(Toolbox.formatThisTimestampForTimePicker(ass.getAssign_date_due()));
+            }
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", assignmentList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/manageAssignmentsUpdate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String updateAssignment(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+            Assignment updatedAssignment = new Assignment();
+
+            final Long assignmentId = new Long(params.get("assignment_id"));
+
+            updatedAssignment.setAssignment_id(assignmentId);
+            AssignmentDao.load(updatedAssignment);
+
+            final String assignment_description = params.get("assign_description");
+
+            final String assign_date_published = params.get("assign_date_published_str");
+            // final String assign_date_expired = params.get("assign_date_expired_str");
+
+            final String assign_date_due = params.get("assign_date_due_str");
+            //final String course_sem_id = params.get("course_sem_id");
+
+
+            final String assignment_title = params.get("assignment_title");
+            final Long score_max;
+            try {
+                score_max = Long.valueOf(params.get("score_max"));
+            }
+            catch (NumberFormatException nfe)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("Invalid Max Score!");
+            }
+
+            if (assignment_title == null || assignment_title.trim().length() == 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Fields can't be left empty!");
+            }
+
+            if (score_max == null || score_max < 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Max Score can't be less than zero!");
+            }
+
+//
+//            if (Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(Toolbox.formatThisTimestampForTimePicker(updatedAssignment.getAssign_date_created()))).after(Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(assign_date_published))))
+//            {
+//                return Toolbox.Print_Jtable_Validation_Error("Published Date has to be after Created Date!");
+//            }
+
+            if (Toolbox.isIncomingPublishedBeforeDue(Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(assign_date_published)), Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(assign_date_due)))) {
+
+                return Toolbox.Print_Jtable_Validation_Error("Published Date has to be before Due Date!");
+            }
+
+            updatedAssignment.setAllForUpdate(assignmentId, assignment_description, Toolbox.formatThisStringToTimestamp(assign_date_published), null, Toolbox.formatThisStringToTimestamp(assign_date_due), assignment_title, score_max);
+            AssignmentDao.save(updatedAssignment);
+
+            updatedAssignment.setAssign_date_due_str(assign_date_due);
+            //updatedAssignment.setAssign_date_expired_str(assign_date_expired);
+            updatedAssignment.setAssign_date_created_str(Toolbox.formatThisTimestampForTimePicker(updatedAssignment.getAssign_date_created()));
+            updatedAssignment.setAssign_date_published_str(assign_date_published);
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Record", updatedAssignment);
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+
+        }
+        jsonArray = gson.toJson(JSONROOT);
+
+        return jsonArray;
+
+
+    }
+
+
+    @RequestMapping(value = "/manageAssignmentsDelete", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String deleteAssignment(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+            List<Submission> subList = SubmissionDao.loadAllForAssignmentId(Long.valueOf(params.get("assignment_id")));
+
+
+            if (subList != null && subList.size() > 0) {
+                JSONROOT.put("Result", "ERROR");
+                JSONROOT.put("Message", "Can't delete assignment due to existing submissions!");
+                jsonArray = gson.toJson(JSONROOT);
+                return jsonArray;
+
+            }
+
+            AssignmentDao.delete(new Assignment(Long.valueOf(params.get("assignment_id"))));
+            JSONROOT.put("Result", "OK");
+            jsonArray = gson.toJson(JSONROOT);
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/manageAssignmentsCreate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String createAssignment(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+
+            final Long uploaded_by_enr_id = Toolbox.getActiveEnrollment().getEnrollment_id();
+
+            final String assignment_description = params.get("assign_description");
+            final String assign_date_published = params.get("assign_date_published_str");
+            //final String assign_date_expired = params.get("assign_date_expired_str");
+            final String assign_date_due = params.get("assign_date_due_str");
+            final Long course_sem_id = Toolbox.getCSIDforActiveEnrollment();
+
+            final String assignment_title = params.get("assignment_title");
+
+            if (assignment_title.trim().length()==0 || assignment_description.trim().length()==0 || assign_date_due.trim().length() == 0 || assign_date_published.trim().length() ==0 || params.get("score_max").trim().length()==0)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("All fields are mandatory!");
+            }
+
+            final Long score_max;
+            try {
+                score_max = Long.valueOf(params.get("score_max"));
+            }
+            catch (NumberFormatException nfe)
+            {
+                return Toolbox.Print_Jtable_Validation_Error("Invalid Max Score!");
+            }
+            if (score_max == null || score_max < 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Max Score can't be less than zero!");
+            }
+
+
+//            Date today = new Date();
+//            if (today.after(Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(assign_date_published))))
+//            {
+//                return Toolbox.Print_Jtable_Validation_Error("Published Date has to be after current date!");
+//            }
+
+            if (Toolbox.isIncomingPublishedBeforeDue(Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(assign_date_published)), Toolbox.convertTStoDate(Toolbox.formatThisStringToTimestamp(assign_date_due)))) {
+
+                return Toolbox.Print_Jtable_Validation_Error("Published Date has to be before Due Date!");
+            }
+
+            Assignment newAssignment = new Assignment();
+
+            final Timestamp ts_temp = new Timestamp(new Date().getTime());
+            newAssignment.setAll(uploaded_by_enr_id, assignment_description, ts_temp, Toolbox.formatThisStringToTimestamp(assign_date_published), null, Toolbox.formatThisStringToTimestamp(assign_date_due), course_sem_id, assignment_title, score_max);
+            AssignmentDao.create(newAssignment);
+            newAssignment.setAssign_date_due_str(assign_date_due);
+            //newAssignment.setAssign_date_expired_str(assign_date_expired);
+            newAssignment.setAssign_date_created_str(Toolbox.formatThisTimestampForTimePicker(ts_temp));
+            newAssignment.setAssign_date_published_str(assign_date_published);
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Record", newAssignment);
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+
+        }
+        jsonArray = gson.toJson(JSONROOT);
+
+        return jsonArray;
+    }
+
+
+}

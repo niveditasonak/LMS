@@ -1,0 +1,356 @@
+package com.elmo.spring.controller;
+
+import com.elmo.spring.constants.ViewNames;
+import com.elmo.spring.persistence.daos.AssignmentDao;
+import com.elmo.spring.persistence.daos.QuestionDao;
+import com.elmo.spring.persistence.daos.SubmissionDao;
+import com.elmo.spring.persistence.dos.Assignment;
+import com.elmo.spring.persistence.dos.Question;
+import com.elmo.spring.persistence.dos.Submission;
+import com.elmo.spring.persistence.helpers.NotFoundException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import framework.Toolbox;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * Created by VB on 10/8/2015.
+ */
+@Controller
+public class ManageSubmissionsController {
+
+
+    @RequestMapping(value = "/assSubmissionList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listAssignments(@RequestParam Map<String, String> params) {
+        //TODO: Sort order in SQL.
+
+        List<Submission> submissionList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            Long ass_id = Long.valueOf(params.get("assignment_id"));
+            submissionList = SubmissionDao.loadAllForAssignmentId(ass_id);
+
+            for (Submission s : submissionList) {
+                s.setAssign_uploaded(null);
+                s.setUploaded_by_name(Toolbox.getUserForEnrId(s.getUploaded_by_enr_id()).getName());
+
+
+            }
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", submissionList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/assSubmissionUpdate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String updateSubmission(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+            final Long subId = Long.valueOf(params.get("submission_id"));
+
+            final Long assign_id = Long.valueOf(params.get("assign_id"));
+
+            Assignment ass = new Assignment(assign_id);
+            AssignmentDao.load(ass);
+
+            Submission updatedSubmission = new Submission(subId);
+            SubmissionDao.load(updatedSubmission);
+
+            final Long score_received = Long.valueOf(params.get("score_received"));
+            if (score_received == null || score_received < 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Score can't be less than zero!");
+            }
+            if (ass.getScore_max() < score_received) {
+                return Toolbox.Print_Jtable_Validation_Error("Score can't be more than the maximum for assignment !");
+            } else {
+                updatedSubmission.setScore_received(score_received);
+            }
+
+            SubmissionDao.save(updatedSubmission);
+
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Record", updatedSubmission);
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+
+        }
+        jsonArray = gson.toJson(JSONROOT);
+
+        return jsonArray;
+
+
+    }
+
+
+    @RequestMapping(value = "/assMySubmissionList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listMyAssignments(@RequestParam Map<String, String> params) {
+        //TODO: Sort order in SQL.
+
+        List<Submission> submissionList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            Long ass_id = Long.valueOf(params.get("assignment_id"));
+            submissionList = SubmissionDao.loadAllForAssignmentIdForEnrId(ass_id, Toolbox.getActiveEnrollment().getEnrollment_id());
+
+            for (Submission s : submissionList) {
+                s.setAssign_uploaded(null);
+                s.setUploaded_by_name(Toolbox.getUserForEnrId(s.getUploaded_by_enr_id()).getName());
+
+
+            }
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", submissionList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/showSubmission", method = RequestMethod.GET)
+    public ModelAndView showSubmission(@RequestParam Map<String, String> params, HttpServletResponse response) {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.MANAGE_ASSIGNMENTS);
+
+        final Long subId = new Long(params.get("id"));
+
+        Submission sub = new Submission();
+        sub.setSubmission_id(subId);
+
+        try {
+            SubmissionDao.load(sub);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (!Toolbox.isInstructor() && sub.getUploaded_by_enr_id() != Toolbox.getActiveEnrollment().getEnrollment_id())
+        {
+            modelAndView.setViewName(ViewNames.LOGOUT_SUCCESS);
+            Toolbox.invalidateSession();
+            return modelAndView;
+        }
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=" + new Date().getTime() + ".pdf");
+
+
+        InputStream in = sub.getAssign_uploaded();
+        ServletOutputStream out = null;
+        try {
+            out = response.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        byte[] outputByte = new byte[4096];
+
+        try {
+            while (in.read(outputByte, 0, 4096) != -1) {
+                out.write(outputByte, 0, 4096);
+            }
+
+            in.close();
+            out.flush();
+            out.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/quizSubmissionList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listQuizes(@RequestParam Map<String, String> params) {
+        //TODO: Sort order in SQL.
+
+        List<Submission> submissionList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            Long quiz_id = Long.valueOf(params.get("quiz_id"));
+            submissionList = SubmissionDao.loadAllForQuizId(quiz_id);
+
+            for (Submission s : submissionList) {
+                s.setUploaded_by_name(Toolbox.getUserForEnrId(s.getUploaded_by_enr_id()).getName());
+            }
+
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", submissionList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+
+    @RequestMapping(value = "/quizSubmissionUpdate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String updateQuizSubmission(@RequestParam Map<String, String> params) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+        try {
+
+            final Long subId = Long.valueOf(params.get("submission_id"));
+
+            final Long quiz_id = Long.valueOf(params.get("quiz_id"));
+            Long maxScoreAcrossQuestions = 0L;
+
+            List<Question> questlist = QuestionDao.loadAllForQuizId(quiz_id);
+            for (Question q : questlist) {
+                if (q != null) {
+                    maxScoreAcrossQuestions = maxScoreAcrossQuestions + q.getMax_score();
+                }
+            }
+
+
+            Submission updatedSubmission = new Submission(subId);
+            SubmissionDao.load(updatedSubmission);
+
+            final Long score_received = Long.valueOf(params.get("score_received"));
+            if (score_received == null || score_received < 0) {
+                return Toolbox.Print_Jtable_Validation_Error("Score can't be less than zero!");
+            }
+            if (maxScoreAcrossQuestions < score_received) {
+                return Toolbox.Print_Jtable_Validation_Error("Score can't be more than the sum of maximums for each question!");
+            } else {
+                updatedSubmission.setScore_received(score_received);
+            }
+
+            // updatedAssignment.setAll(assignmentId,uploaded_by_enr_id,assignment_description,assign_date_created,assign_date_published,assign_date_expired,assign_date_due,course_sem_id,assignment_title,score_max);
+            SubmissionDao.save(updatedSubmission);
+
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Record", updatedSubmission);
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+
+        }
+        jsonArray = gson.toJson(JSONROOT);
+
+        return jsonArray;
+
+
+    }
+
+
+    @RequestMapping(value = "/quizMySubmissionList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listMyQuizes(@RequestParam Map<String, String> params) {
+        //TODO: Sort order in SQL.
+
+        List<Submission> submissionList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+        try {
+
+            Long quiz_id = Long.valueOf(params.get("quiz_id"));
+            submissionList = SubmissionDao.loadAllForQuizIdForEnrId(quiz_id, Toolbox.getActiveEnrollment().getEnrollment_id());
+
+            for (Submission s : submissionList) {
+                s.setUploaded_by_name(Toolbox.getUserForEnrId(s.getUploaded_by_enr_id()).getName());
+            }
+
+
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", submissionList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+
+        }
+        return jsonArray;
+    }
+
+}

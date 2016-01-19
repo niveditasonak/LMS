@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/elmoRepo/!svn/ver/123/trunk/ProjectElmo/src/com/elmo/spring/persistence/helpers
+END
+NotFoundException.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/elmoRepo/!svn/ver/5/trunk/ProjectElmo/src/com/elmo/spring/persistence/helpers/NotFoundException.java
+END
+ConnectionManager.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/elmoRepo/!svn/ver/15/trunk/ProjectElmo/src/com/elmo/spring/persistence/helpers/ConnectionManager.java
+END
+testApplication.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/elmoRepo/!svn/ver/101/trunk/ProjectElmo/src/com/elmo/spring/persistence/helpers/testApplication.java
+END
+AuthenticationInterceptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/elmoRepo/!svn/ver/123/trunk/ProjectElmo/src/com/elmo/spring/persistence/helpers/AuthenticationInterceptor.java
+END
+DaoFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/elmoRepo/!svn/ver/68/trunk/ProjectElmo/src/com/elmo/spring/persistence/helpers/DaoFactory.java
+END

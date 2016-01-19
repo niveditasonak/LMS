@@ -1,0 +1,83 @@
+package com.elmo.spring.controller;
+
+import com.elmo.spring.constants.ViewNames;
+import com.elmo.spring.persistence.daos.UserDao;
+import com.elmo.spring.persistence.dos.User;
+import com.elmo.spring.persistence.helpers.NotFoundException;
+import framework.Toolbox;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+/**
+ * Created by VB on 10/8/2015.
+ */
+@Controller
+@SessionAttributes({"GLOBAL_USER"})
+public class ProfilePageController {
+
+    public static final int MAX_ENROLLMENT_FOR_COURSE = 15;
+
+    @RequestMapping(value = "/elmo/profilePage", method = RequestMethod.GET)
+    public ModelAndView init() {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.PROFILE_PAGE);
+
+        User user = Toolbox.getUserObjectInSession();
+
+        Toolbox.checkIfUserIsNullAndRedirect(modelAndView, user);
+
+        modelAndView.getModel().put("user", user);
+        modelAndView.getModel().put("errorStringList", null);
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/elmo/profilePageUpdate", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    ModelAndView updateProfile(@RequestParam Map<String, String> params) {
+
+        ModelAndView modelAndView = new ModelAndView(ViewNames.PROFILE_PAGE);
+
+        String updateName = params.get("updated_name");
+        String updatedBio = params.get("updated_biodata");
+
+
+        if (updateName == null || updateName.trim().length() == 0) {
+            modelAndView.getModel().put("errorStringList", "User Name can't be left empty!");
+
+            User user = Toolbox.getUserObjectInSession();
+
+            modelAndView.getModel().put("user", user);
+
+            return modelAndView;
+        }
+
+        User updatedUser = new User();
+        updatedUser.setUser_id(Toolbox.getUserObjectInSession().getUser_id());
+        try {
+            UserDao.load(updatedUser);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        updatedUser.setName(updateName);
+        updatedUser.setUser_biodata(updatedBio);
+
+        UserDao.saveProfile(updatedUser);
+
+        modelAndView.getModel().put("user", updatedUser);
+
+        modelAndView.getModel().put("GLOBAL_USER", updatedUser);
+
+
+        return modelAndView;
+
+    }
+
+
+}

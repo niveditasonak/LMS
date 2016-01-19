@@ -1,0 +1,135 @@
+package com.elmo.spring.controller;
+
+import com.elmo.spring.constants.ViewNames;
+import com.elmo.spring.persistence.daos.*;
+import com.elmo.spring.persistence.dos.Assignment;
+import com.elmo.spring.persistence.dos.Course_Semester;
+import com.elmo.spring.persistence.dos.Quiz;
+import com.elmo.spring.persistence.dos.Submission;
+import com.elmo.spring.persistence.helpers.NotFoundException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by VB on 10/8/2015.
+ */
+@Controller
+@SessionAttributes({"CSID_ADMIN_GRADE"})
+public class ViewGradesController {
+
+    @RequestMapping(value = "/elmo/grades", method = RequestMethod.GET)
+    public ModelAndView init() {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.VIEW_GRADES);
+
+        List<Submission> submissionList = null;
+
+
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/elmo/gradesForAdmin", method = RequestMethod.GET)
+    public ModelAndView initForAdmin() {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.VIEW_GRADES_ADMIN);
+
+        List<Submission> submissionList = null;
+
+        modelAndView.getModel().put("CSID_ADMIN_GRADE", -1L);
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/elmo/gradesForAdminFilter", method = RequestMethod.POST)
+    public ModelAndView initForAdminFilter(@RequestParam Map<String, String> params) {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.VIEW_GRADES_ADMIN);
+
+        List<Submission> submissionList = null;
+
+        modelAndView.getModel().put("CSID_ADMIN_GRADE", Long.valueOf(params.get("course_sem_id")));
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/elmo/viewGradesList", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String listGrades(@RequestParam Map<String, String> params) {
+        //TODO: Sort order in SQL.
+        ModelAndView modelAndView = new ModelAndView(ViewNames.VIEW_GRADES);
+
+        List<Course_Semester> offeringList = null;
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, Object> JSONROOT = new HashMap<String, Object>();
+        String jsonArray = null;
+
+
+        List<Submission> submissionList = null;
+
+        try {
+            final Long enrollment_id = Long.valueOf(params.get("enrollment_id"));
+            submissionList = SubmissionDao.loadAllForEnrollmentId(enrollment_id);
+
+            Long maxScoreTotal = 0L;
+            Long maxReceivedTotal = 0L;
+
+            for (Submission submission : submissionList) {
+
+                if (submission.getAssign_id() != 0) {
+                    Assignment ass = AssignmentDao.getObject(submission.getAssign_id());
+                    submission.setAss_quiz_title(ass.getAssignment_title());
+                    submission.setMax_score_for_display(ass.getScore_max());
+                    submission.setAssign_uploaded(null);
+                    maxReceivedTotal = maxReceivedTotal + submission.getScore_received();
+                    maxScoreTotal = maxScoreTotal + submission.getMax_score_for_display();
+                } else {
+                    Quiz q = QuizDao.getObject(submission.getQuiz_id());
+                    submission.setAss_quiz_title(q.getQuiz_title());
+                    submission.setMax_score_for_display(q.getMax_score());
+
+                    maxReceivedTotal = maxReceivedTotal + submission.getScore_received();
+                    maxScoreTotal = maxScoreTotal + submission.getMax_score_for_display();
+                }
+
+            }
+            Submission total = new Submission();
+            total.setMax_score_for_display(maxScoreTotal);
+            total.setScore_received(maxReceivedTotal);
+            total.setAss_quiz_title("<b>Total<b/>");
+            submissionList.add(total);
+            //Return in the format required by jTable plugin
+            JSONROOT.put("Result", "OK");
+            JSONROOT.put("Records", submissionList);
+
+            // Convert Java Object to Json
+            jsonArray = gson.toJson(JSONROOT);
+
+            return jsonArray;
+
+
+        } catch (Exception ex) {
+            JSONROOT.put("Result", "ERROR");
+            JSONROOT.put("Message", ex.getMessage());
+            jsonArray = gson.toJson(JSONROOT);
+            return jsonArray;
+        }
+    }
+
+    private static void updateViewObject(Course_Semester cs) throws NotFoundException, SQLException {
+        cs.setCourseObject(CourseDao.getObject(cs.getCourse_id()));
+        cs.setCourse_name(cs.getCourseObject().getCourse_number() + " - " + cs.getCourseObject().getCourse_name());
+        cs.setCourse_number(cs.getCourseObject().getCourse_number());
+        cs.setSemesterObject(SemesterDao.getObject(cs.getSemester_id()));
+        cs.setSemester_type(cs.getSemesterObject().getSemester_type());
+    }
+
+
+}

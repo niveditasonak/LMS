@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="AUTH_SCHEMA" uuid="32534ad1-dd51-42f2-b177-3c2d13b0f18e">
+      <secret-storage>memory</secret-storage>
+      <user-name>auth_schema</user-name>
+      <schema-pattern>*.AUTH_SCHEMA *.SYS *.SYSTEM</schema-pattern>
+      <default-schemas>*.AUTH_SCHEMA *.SYS *.SYSTEM</default-schemas>
+    </data-source>
+  </component>
+</project>

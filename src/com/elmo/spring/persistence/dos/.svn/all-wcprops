@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/elmoRepo/!svn/ver/140/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos
+END
+Assignment.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/elmoRepo/!svn/ver/109/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Assignment.java
+END
+Course_Semester.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/elmoRepo/!svn/ver/94/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Course_Semester.java
+END
+Submission.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/elmoRepo/!svn/ver/133/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Submission.java
+END
+File.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/elmoRepo/!svn/ver/94/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/File.java
+END
+User.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/elmoRepo/!svn/ver/37/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/User.java
+END
+Course.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/elmoRepo/!svn/ver/94/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Course.java
+END
+Event.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/elmoRepo/!svn/ver/109/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Event.java
+END
+Semester.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/elmoRepo/!svn/ver/5/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Semester.java
+END
+Announcement.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/elmoRepo/!svn/ver/94/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Announcement.java
+END
+Question.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/elmoRepo/!svn/ver/109/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Question.java
+END
+Quiz.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/elmoRepo/!svn/ver/128/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Quiz.java
+END
+Enrollment.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/elmoRepo/!svn/ver/140/trunk/ProjectElmo/src/com/elmo/spring/persistence/dos/Enrollment.java
+END

@@ -1,0 +1,273 @@
+package com.elmo.spring.controller;
+
+import com.elmo.spring.constants.ViewNames;
+import com.elmo.spring.persistence.daos.AssignmentDao;
+import com.elmo.spring.persistence.daos.QuestionDao;
+import com.elmo.spring.persistence.daos.QuizDao;
+import com.elmo.spring.persistence.daos.SubmissionDao;
+import com.elmo.spring.persistence.dos.Assignment;
+import com.elmo.spring.persistence.dos.Question;
+import com.elmo.spring.persistence.dos.Quiz;
+import com.elmo.spring.persistence.dos.Submission;
+import com.elmo.spring.persistence.helpers.NotFoundException;
+import framework.Toolbox;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * Created by VB on 10/8/2015.
+ */
+@Controller
+@SessionAttributes({"GLOBAL_CURRENT_ASSIGNMENT_ID", "GLOBAL_CURRENT_QUIZ_ID", "QUIZ_TIME_STARTED"})
+public class SubmitAssignmentController {
+
+
+    @RequestMapping(value = "/openAssignment", method = RequestMethod.GET)
+    public ModelAndView openAssignment(@RequestParam Map<String, String> params) {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.SUBMIT_ASSIGNMENT);
+
+        //TODO validation
+
+
+        final Long assId = Long.valueOf(params.get("id"));
+        modelAndView.getModel().put("GLOBAL_CURRENT_ASSIGNMENT_ID", assId);
+
+
+        Assignment newAss = new Assignment(assId);
+        try {
+            AssignmentDao.load(newAss);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (!Toolbox.checkIfAssignmentCSMatchesUserCS(newAss, Toolbox.getActiveEnrollment())) {
+            modelAndView.getModel().put("GLOBAL_CURRENT_ASSIGNMENT_ID", -1L);
+            return modelAndView;
+        }
+
+
+        newAss.setAssign_date_created_str(Toolbox.formatThisTimestampForTimePicker(newAss.getAssign_date_created()));
+        // newAss.setAssign_date_expired_str(Toolbox.formatThisTimestampForTimePicker(newAss.getAssign_date_expired()));
+        newAss.setAssign_date_published_str(Toolbox.formatThisTimestampForTimePicker(newAss.getAssign_date_published()));
+        newAss.setAssign_date_due_str(Toolbox.formatThisTimestampForTimePicker(newAss.getAssign_date_due()));
+
+
+        modelAndView.getModel().put("assignment_title", newAss.getAssignment_title());
+        modelAndView.getModel().put("assign_description", newAss.getAssign_description());
+        modelAndView.getModel().put("assign_date_created", newAss.getAssign_date_created_str());
+        modelAndView.getModel().put("assign_date_published", newAss.getAssign_date_published_str());
+        modelAndView.getModel().put("assign_date_due", newAss.getAssign_date_due_str());
+        modelAndView.getModel().put("score_max", newAss.getScore_max());
+
+        if (Toolbox.doesAssignmentSubmissionExistForEnrIdForAssId(Toolbox.getActiveEnrollment().getEnrollment_id(), assId) || !Toolbox.isAssBetweenPublishedAndDue(assId)) {
+
+            modelAndView.getModel().put("GLOBAL_CURRENT_ASSIGNMENT_ID", -1L);
+        }
+
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/openQuiz", method = RequestMethod.GET)
+    public ModelAndView openQuiz(@RequestParam Map<String, String> params) {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.SUBMIT_QUIZ);
+
+        //TODO validation
+
+
+        final Long assId = Long.valueOf(params.get("id"));
+
+        modelAndView.getModel().put("GLOBAL_CURRENT_QUIZ_ID", assId);
+        modelAndView.getModel().put("QUIZ_TIME_STARTED", new Date());
+        Quiz newAss = new Quiz(assId);
+        try {
+            QuizDao.load(newAss);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (!Toolbox.checkIfQuizCSMatchesUserCS(newAss, Toolbox.getActiveEnrollment())) {
+            modelAndView.getModel().put("GLOBAL_CURRENT_QUIZ_ID", -1L);
+            return modelAndView;
+        }
+
+        newAss.setQuiz_date_created_str(Toolbox.formatThisTimestampForTimePicker(newAss.getQuiz_date_created()));
+        newAss.setQuiz_date_expired_str(Toolbox.formatThisTimestampForTimePicker(newAss.getQuiz_date_expired()));
+        newAss.setQuiz_date_published_str(Toolbox.formatThisTimestampForTimePicker(newAss.getQuiz_date_published()));
+        newAss.setQuiz_due_date_str(Toolbox.formatThisTimestampForTimePicker(newAss.getQuiz_due_date()));
+
+        modelAndView.getModel().put("quiz_title", newAss.getQuiz_title());
+        modelAndView.getModel().put("quiz_description", newAss.getQuiz_description());
+        modelAndView.getModel().put("quiz_date_created", newAss.getQuiz_date_created_str());
+        modelAndView.getModel().put("quiz_date_published", newAss.getQuiz_date_published_str());
+        modelAndView.getModel().put("quiz_due_date", newAss.getQuiz_due_date_str());
+        modelAndView.getModel().put("time_taken", newAss.getTime_taken());
+
+        if (Toolbox.doesQuizSubmissionExistForEnrIdForQuizId(Toolbox.getActiveEnrollment().getEnrollment_id(), assId) || !Toolbox.isQuizBetweenPublishedAndDue(assId)) {
+
+            modelAndView.getModel().put("GLOBAL_CURRENT_QUIZ_ID", -1L);
+        }
+
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/submitAssignmentSubmit", method = RequestMethod.POST)
+    public ModelAndView submitAssignmentSubmit(@RequestParam Map<String, String> params, HttpServletRequest request)//, @RequestParam("uploadedFile") MultipartFile file) {
+
+    {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.TAKE_ASSIGNMENT);
+
+        ServletFileUpload fileUpload = new ServletFileUpload(new DiskFileItemFactory());
+        List<FileItem> fileItems = null;
+        try {
+            fileItems = fileUpload.parseRequest(request);
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+        }
+        InputStream in = null;
+        try {
+            in = fileItems.get(0).getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        Long currentAssignmentId = Toolbox.getCurrentAssignmentId();
+        /*
+byte[] byteA  = null;
+        Blob blb = null;
+        try {
+            byteA = IOUtils.toByteArray(in);
+
+            try {
+                blb = new SerialBlob(byteA);//debugger says content is empty here
+
+            }//debugger says myinputstream has the same values as in edit#1
+            catch (SerialException e) {e.printStackTrace();}
+            catch (SQLException e) {e.printStackTrace();}
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        */
+
+        Submission sub = Submission.createAssignmentSubmission(currentAssignmentId, -999L, new Timestamp(new Date().getTime()), in, Toolbox.getActiveEnrollment().getEnrollment_id());
+        try {
+            SubmissionDao.create(sub);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        modelAndView.getModel().put("message", "Assignment Submitted Successfully!");
+
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/submitQuizSubmit", method = RequestMethod.POST)
+    public ModelAndView submitQuizSubmit(@RequestParam Map<String, String> params, HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView(ViewNames.TAKE_QUIZ);
+        modelAndView.getModel().put("message", "Quiz Submitted Successfully!");
+
+
+        Long currentQuizId = Toolbox.getCurrentQuizId();
+
+        Date currentTime = new Date();
+
+        Date quizStartTime = (Date) Toolbox.getSession().getAttribute("QUIZ_TIME_STARTED");
+
+        long diff = currentTime.getTime() - quizStartTime.getTime();
+        long diffSeconds = (diff / 1000) - 10;
+
+        Quiz currentQuiz = null;
+        try {
+            currentQuiz = (Quiz) QuizDao.getObject(currentQuizId);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Boolean timeExceeded = false;
+        if (diffSeconds > (currentQuiz.getTime_taken() * 60)) {
+            timeExceeded = true;
+        }
+
+
+        List<Question> questionList = null;
+        try {
+            questionList = QuestionDao.loadAllForQuizId(currentQuizId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Long earnedScore = 0L;
+        for (Question question : questionList) {
+
+            String[] responseOfQuestion = request.getParameterValues("q" + question.getQuestion_number());
+            String correctAns = question.getCorrect_answers().toLowerCase();
+
+            if (responseOfQuestion == null) {
+                continue;
+            }
+            if (responseOfQuestion[0].equals("true") || responseOfQuestion[0].equals("false")) {
+                if (responseOfQuestion[0].equalsIgnoreCase(correctAns)) {
+                    earnedScore = earnedScore + question.getMax_score();
+                }
+            } else {
+                int totalCorrectChecks = 0;
+                for (int i = 0; i < responseOfQuestion.length; i++) {
+                    if (correctAns.contains(responseOfQuestion[i])) {
+                        totalCorrectChecks++;
+                    }
+                }
+                if (responseOfQuestion.length == totalCorrectChecks) {
+                    earnedScore = earnedScore + question.getMax_score();
+                }
+            }
+
+
+        }
+
+
+        Submission sub = null;
+
+        if (timeExceeded) {
+            sub = Submission.createQuizSubmission(currentQuizId, 0L, new Timestamp(new Date().getTime()), null, Toolbox.getActiveEnrollment().getEnrollment_id());
+        } else {
+
+            sub = Submission.createQuizSubmission(currentQuizId, earnedScore, new Timestamp(new Date().getTime()), null, Toolbox.getActiveEnrollment().getEnrollment_id());
+        }
+        try {
+            SubmissionDao.create(sub);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return modelAndView;
+    }
+
+
+}
